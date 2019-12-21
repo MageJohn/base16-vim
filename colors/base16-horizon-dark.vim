@@ -21,10 +21,10 @@ let s:gui01        = "232530"
 let g:base16_gui01 = "232530"
 let s:gui02        = "2E303E"
 let g:base16_gui02 = "2E303E"
-let s:gui03        = "676A8D"
-let g:base16_gui03 = "676A8D"
-let s:gui04        = "CED1D0"
-let g:base16_gui04 = "CED1D0"
+let s:gui03        = "6F6F70"
+let g:base16_gui03 = "6F6F70"
+let s:gui04        = "9DA0A2"
+let g:base16_gui04 = "9DA0A2"
 let s:gui05        = "CBCED0"
 let g:base16_gui05 = "CBCED0"
 let s:gui06        = "DCDFE4"
@@ -107,7 +107,7 @@ if has("nvim")
   let g:terminal_color_5 =  "#B072D1"
   let g:terminal_color_6 =  "#24A8B4"
   let g:terminal_color_7 =  "#CBCED0"
-  let g:terminal_color_8 =  "#676A8D"
+  let g:terminal_color_8 =  "#6F6F70"
   let g:terminal_color_9 =  "#E93C58"
   let g:terminal_color_10 = "#EFAF8E"
   let g:terminal_color_11 = "#EFB993"
@@ -131,7 +131,7 @@ elseif has("terminal")
         \ "#B072D1",
         \ "#24A8B4",
         \ "#CBCED0",
-        \ "#676A8D",
+        \ "#6F6F70",
         \ "#E93C58",
         \ "#EFAF8E",
         \ "#EFB993",
@@ -151,26 +151,24 @@ let g:colors_name = "base16-horizon-dark"
 " Optional variables are attributes and guisp
 function! g:Base16hi(group, guifg, guibg, ctermfg, ctermbg, ...)
   let l:attr = get(a:, 1, "")
-  let l:guisp = get(a:, 2, "")
+  let l:a = copy(a:)
+  let l:a['guisp'] = get(a:, 2, "")
+  let l:a['gui'] = l:attr
+  let l:a['cterm'] = l:attr
 
-  if a:guifg != ""
-    exec "hi " . a:group . " guifg=#" . a:guifg
-  endif
-  if a:guibg != ""
-    exec "hi " . a:group . " guibg=#" . a:guibg
-  endif
-  if a:ctermfg != ""
-    exec "hi " . a:group . " ctermfg=" . a:ctermfg
-  endif
-  if a:ctermbg != ""
-    exec "hi " . a:group . " ctermbg=" . a:ctermbg
-  endif
-  if l:attr != ""
-    exec "hi " . a:group . " gui=" . l:attr . " cterm=" . l:attr
-  endif
-  if l:guisp != ""
-    exec "hi " . a:group . " guisp=#" . l:guisp
-  endif
+  " A key=#rrggbb style argument to hi
+  let l:CArg = {arg -> l:a[arg] != "" ? arg .. "=#" .. l:a[arg] : ""}
+  " A key=value style argument to hi
+  let l:Arg = {arg -> l:a[arg] != "" ? arg .. "=" .. l:a[arg] : ""}
+
+  exec "hi" a:group
+        \ l:CArg("guifg")
+        \ l:CArg("guibg")
+        \ l:CArg("guisp")
+        \ l:Arg ("ctermfg")
+        \ l:Arg("ctermbg")
+        \ l:Arg("gui")
+        \ l:Arg("cterm")
 endfunction
 
 
@@ -208,6 +206,7 @@ call <sid>hi("Title",         s:gui0D, "", s:cterm0D, "", "none", "")
 call <sid>hi("Conceal",       s:gui0D, s:gui00, s:cterm0D, s:cterm00, "", "")
 call <sid>hi("Cursor",        s:gui00, s:gui05, s:cterm00, s:cterm05, "", "")
 call <sid>hi("NonText",       s:gui03, "", s:cterm03, "", "", "")
+call <sid>hi("Whitespace",    s:gui03, "", s:cterm03, "", "", "")
 call <sid>hi("LineNr",        s:gui03, s:gui01, s:cterm03, s:cterm01, "", "")
 call <sid>hi("SignColumn",    s:gui03, s:gui01, s:cterm03, s:cterm01, "", "")
 call <sid>hi("StatusLine",    s:gui04, s:gui02, s:cterm04, s:cterm02, "none", "")

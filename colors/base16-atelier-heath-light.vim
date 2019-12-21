@@ -151,26 +151,24 @@ let g:colors_name = "base16-atelier-heath-light"
 " Optional variables are attributes and guisp
 function! g:Base16hi(group, guifg, guibg, ctermfg, ctermbg, ...)
   let l:attr = get(a:, 1, "")
-  let l:guisp = get(a:, 2, "")
+  let l:a = copy(a:)
+  let l:a['guisp'] = get(a:, 2, "")
+  let l:a['gui'] = l:attr
+  let l:a['cterm'] = l:attr
 
-  if a:guifg != ""
-    exec "hi " . a:group . " guifg=#" . a:guifg
-  endif
-  if a:guibg != ""
-    exec "hi " . a:group . " guibg=#" . a:guibg
-  endif
-  if a:ctermfg != ""
-    exec "hi " . a:group . " ctermfg=" . a:ctermfg
-  endif
-  if a:ctermbg != ""
-    exec "hi " . a:group . " ctermbg=" . a:ctermbg
-  endif
-  if l:attr != ""
-    exec "hi " . a:group . " gui=" . l:attr . " cterm=" . l:attr
-  endif
-  if l:guisp != ""
-    exec "hi " . a:group . " guisp=#" . l:guisp
-  endif
+  " A key=#rrggbb style argument to hi
+  let l:CArg = {arg -> l:a[arg] != "" ? arg .. "=#" .. l:a[arg] : ""}
+  " A key=value style argument to hi
+  let l:Arg = {arg -> l:a[arg] != "" ? arg .. "=" .. l:a[arg] : ""}
+
+  exec "hi" a:group
+        \ l:CArg("guifg")
+        \ l:CArg("guibg")
+        \ l:CArg("guisp")
+        \ l:Arg ("ctermfg")
+        \ l:Arg("ctermbg")
+        \ l:Arg("gui")
+        \ l:Arg("cterm")
 endfunction
 
 
@@ -208,6 +206,7 @@ call <sid>hi("Title",         s:gui0D, "", s:cterm0D, "", "none", "")
 call <sid>hi("Conceal",       s:gui0D, s:gui00, s:cterm0D, s:cterm00, "", "")
 call <sid>hi("Cursor",        s:gui00, s:gui05, s:cterm00, s:cterm05, "", "")
 call <sid>hi("NonText",       s:gui03, "", s:cterm03, "", "", "")
+call <sid>hi("Whitespace",    s:gui03, "", s:cterm03, "", "", "")
 call <sid>hi("LineNr",        s:gui03, s:gui01, s:cterm03, s:cterm01, "", "")
 call <sid>hi("SignColumn",    s:gui03, s:gui01, s:cterm03, s:cterm01, "", "")
 call <sid>hi("StatusLine",    s:gui04, s:gui02, s:cterm04, s:cterm02, "none", "")
